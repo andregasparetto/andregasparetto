@@ -1,0 +1,35 @@
+name: Update README
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Atualiza diariamente à meia-noite UTC
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Update README with GitHub Stats
+        run: |
+          stats=$(curl -s "https://github-readme-stats.vercel.app/api?username=andregasparetto&show_icons=true&theme=dark")
+          streak=$(curl -s "https://github-readme-streak-stats.herokuapp.com/?user=andregasparetto&theme=dark")
+          awk -v stats="$stats" -v streak="$streak" '
+            BEGIN {RS = ORS = ""}
+            /<!--START_SECTION:stats-->/ {print "<!--START_SECTION:stats-->\n" stats "\n<!--END_SECTION:stats-->"}
+            /<!--START_SECTION:streak-->/ {print "<!--START_SECTION:streak-->\n" streak "\n<!--END_SECTION:streak-->"}
+            !/<!--START_SECTION:(stats|streak)-->/ {print}
+          ' README.md > README.tmp && mv README.tmp README.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git commit -m "Updated README with GitHub Stats"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
