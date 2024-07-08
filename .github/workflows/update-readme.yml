@@ -13,74 +13,35 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Generate Stats
-        run: |
-          echo "<div align=\"center\">" > README.md
-          echo "  <img height=\"150\" src=\"https://media.licdn.com/dms/image/D4D03AQFdR5jJ5I3i3w/profile-displayphoto-shrink_200_200/0/1713374835833?e=1726099200&v=beta&t=K4RV5-fAFiTTnVv9u1cOAEF_hjP8_iEIB5Ayb2eXu9A\"  />" >> README.md
-          echo "</div>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<div align=\"center\">" >> README.md
-          echo "  <a href=\"https://www.linkedin.com/in/andré-santos-gasparetto-0786b7302/\" target=\"_blank\">" >> README.md
-          echo "    <img src=\"https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge\" height=\"25\" alt=\"linkedin logo\"  />" >> README.md
-          echo "  </a>" >> README.md
-          echo "</div>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<div align=\"center\">" >> README.md
-          echo "  <img src=\"https://visitor-badge.laobi.icu/badge?page_id=andregasparetto.andregasparetto&\"  />" >> README.md
-          echo "</div>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<h1 align=\"center\">Olá!👋</h1>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<h3 align=\"left\">👩‍💻  About Me</h3>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<p align=\"left\">I'm André from Brazil<br><br>- 📚 I'm currently learning Python, JavaScript and Swift</p>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<h3 align=\"left\">🛠 Language and tools</h3>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<div align=\"left\">" >> README.md
-          echo "  <img src=\"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg\" height=\"40\" alt=\"css3 logo\"  />" >> README.md
-          echo "  <img width=\"12\" />" >> README.md
-          echo "  <img src=\"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg\" height=\"40\" alt=\"github logo\"  />" >> README.md
-          echo "  <img width=\"12\" />" >> README.md
-          echo "  <img src=\"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg\" height=\"40\" alt=\"googlecloud logo\"  />" >> README.md
-          echo "  <img width=\"12\" />" >> README.md
-          echo "  <img src=\"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg\" height=\"40\" alt=\"javascript logo\"  />" >> README.md
-          echo "  <img width=\"12\" />" >> README.md
-          echo "  <img src=\"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg\" height=\"40\" alt=\"python logo\"  />" >> README.md
-          echo "  <img width=\"12\" />" >> README.md
-          echo "  <img src=\"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg\" height=\"40\" alt=\"swift logo\"  />" >> README.md
-          echo "</div>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "<h3 align=\"left\">🔥⚡   My Stats :</h3>" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
-          echo "" >> README.md
-          echo "![GitHub Stats](https://github-readme-stats.vercel.app/api?username=andregasparetto&show_icons=true&theme=dark)" >> README.md
-          echo "![Streak Stats](https://github-readme-streak-stats.herokuapp.com/?user=andregasparetto&theme=dark)" >> README.md
-          echo "" >> README.md
-          echo "###" >> README.md
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-      - name: Commit Changes
+      - name: Update README with GitHub Stats
+        run: |
+          stats=$(curl -s https://github-readme-stats.vercel.app/api?username=andregasparetto&show_icons=true&theme=dark)
+          streak=$(curl -s https://github-readme-streak-stats.herokuapp.com/?user=andregasparetto&theme=dark)
+          echo "<!--START_SECTION:stats-->" > stats.md
+          echo "![$stats]" >> stats.md
+          echo "<!--END_SECTION:stats-->" >> stats.md
+          echo "<!--START_SECTION:streak-->" > streak.md
+          echo "![$streak]" >> streak.md
+          echo "<!--END_SECTION:streak-->" >> streak.md
+
+      - name: Generate README
+        run: |
+          cp README.template.md README.md
+          stats=$(cat stats.md)
+          streak=$(cat streak.md)
+          sed -i "s|<!--START_SECTION:stats-->.*<!--END_SECTION:stats-->|$stats|g" README.md
+          sed -i "s|<!--START_SECTION:streak-->.*<!--END_SECTION:streak-->|$streak|g" README.md
+
+      - name: Commit changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
+          git add README.md
           git commit -m "Updated README with GitHub Stats"
           git push
         env:
