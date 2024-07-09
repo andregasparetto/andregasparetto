@@ -55,12 +55,7 @@
 ###
 
 <div align="center">
-  <!--START_SECTION:stats-->
-  ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=andregasparetto&show_icons=true&theme=dark)
-  <!--END_SECTION:stats-->
-  <!--START_SECTION:streak-->
-  ![Streak Stats](https://github-readme-streak-stats.herokuapp.com/?user=andregasparetto&theme=dark)
-  <!--END_SECTION:streak-->
+  <img src="https://streak-stats.demolab.com?user=andregasparetto&locale=en&mode=daily&theme=dark&hide_border=false&border_radius=5&order=3" height="220" alt="streak graph"  />
 </div>
 
 ###
