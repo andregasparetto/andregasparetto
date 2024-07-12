@@ -1,5 +1,5 @@
 <div align="center">
-  <img height="150" src="https://media.licdn.com/dms/image/D4D03AQFdR5jJ5I3i3w/profile-displayphoto-shrink_200_200/0/1713374835833?e=1726099200&v=beta&t=K4RV5-fAFiTTnVv9u1cOAEF_hjP8_iEIB5Ayb2eXu9A"  />
+  <img height="150" src="https://avatars.githubusercontent.com/u/159174962?v=4"  />
 </div>
 
 ###
